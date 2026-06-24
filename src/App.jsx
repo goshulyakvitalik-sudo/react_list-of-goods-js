@@ -16,24 +16,36 @@ export const goodsFromServer = [
 ];
 
 export const App = () => {
-  const [visibleGoods, setVisibleGoods] = useState(goodsFromServer);
   const [sortType, setSortType] = useState('');
   const [isReversed, setIsReversed] = useState(false);
 
   const isModified = sortType !== '' || isReversed;
+
+  const visibleGoods = [...goodsFromServer];
+
+  if (sortType === 'alphabet') {
+    visibleGoods.sort((a, b) => a.localeCompare(b));
+  }
+
+  if (sortType === 'length') {
+    visibleGoods.sort((a, b) => a.length - b.length);
+  }
+
+  if (isReversed) {
+    visibleGoods.reverse();
+  }
 
   return (
     <div className="section content">
       <div className="buttons">
         <button
           type="button"
-          className={sortType === 'alphabet' ? 'button is-info' : 'button is-info is-light'}
+          className={
+            sortType === 'alphabet'
+              ? 'button is-info'
+              : 'button is-info is-light'
+          }
           onClick={() => {
-            const sortedGoods = [...visibleGoods];
-
-            sortedGoods.sort((a, b) => a.localeCompare(b));
-
-            setVisibleGoods(sortedGoods);
             setSortType('alphabet');
           }}
         >
@@ -42,13 +54,12 @@ export const App = () => {
 
         <button
           type="button"
-          className={sortType === 'length' ? 'button is-success' : 'button is-success is-light'}
+          className={
+            sortType === 'length'
+              ? 'button is-success'
+              : 'button is-success is-light'
+          }
           onClick={() => {
-            const sortedByLength = [...visibleGoods];
-
-            sortedByLength.sort((a, b) => a.length - b.length);
-
-            setVisibleGoods(sortedByLength);
             setSortType('length');
           }}
         >
@@ -57,13 +68,10 @@ export const App = () => {
 
         <button
           type="button"
-          className={isReversed ? 'button is-warning' : 'button is-warning is-light'}
+          className={
+            isReversed ? 'button is-warning' : 'button is-warning is-light'
+          }
           onClick={() => {
-            const reversedGoods = [...visibleGoods];
-
-            reversedGoods.reverse();
-
-            setVisibleGoods(reversedGoods);
             setIsReversed(!isReversed);
           }}
         >
@@ -75,7 +83,6 @@ export const App = () => {
             type="button"
             className="button is-danger is-light"
             onClick={() => {
-              setVisibleGoods(goodsFromServer);
               setSortType('');
               setIsReversed(false);
             }}
